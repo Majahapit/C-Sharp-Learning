@@ -8,7 +8,7 @@
  */
 
 
-//TODO: Add standardization to input stream.
+//TODO: Actual change of file.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ namespace One_Time_File_Cleanup
     {
         static void Main(string[] args)
         {
-            var fileName = "Word List.txt";
+            var fileName = "Word List.txt"; //project settings set to include word list in output file. Fixes the relative path
             if (!File.Exists(fileName)) 
             {
                 Console.WriteLine("File was not found");
@@ -35,14 +35,32 @@ namespace One_Time_File_Cleanup
             {
                 word = file.ReadLine();
 
+                if (!WordCleanup(word))
+                {
+                    Console.WriteLine("Error! Null word encountered. Terminating...");
+                    return;
+                }
+
                 if(!wordList.Add(word))
                 {
+                    //Console.WriteLine(word); writes all DUPLICATE words
                     deletionCounter++;
                 }
             }
+            Console.WriteLine(deletionCounter);
+        }
+
+        //returns false if null, returns true otherwise
+        static bool WordCleanup(String word)
+        {
+            if(word.Equals(null))
+            {
+                return false;
+            }
+            word.ToLower();
+            word.Trim();
             
-
-
+            return true;
         }
         //static StreamReader OpenTextFile(string name)
         //{
