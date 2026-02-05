@@ -8,9 +8,8 @@
  */
 
 
-//TODO: Done! File is trimmed.
+//TODO: Generate acceptable answer list. "trimmed wordle list.txt" is currently a guess list
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -20,9 +19,15 @@ namespace One_Time_File_Cleanup
     {
         static void Main(string[] args)
         {
+            prepareGuessList();
+            prepareAnswerList();
+        }
+
+        static void prepareGuessList()
+        {
             var baseListName = "Word List.txt"; //project settings are set to include word list in output file. 
-                                            //Fixes the relative path. This is a Visual Studio Community setting.
-            if (!File.Exists(baseListName)) 
+                                                //Fixes the relative path. This is a Visual Studio Community setting.
+            if (!File.Exists(baseListName))
             {
                 Console.WriteLine("File was not found");
                 Console.ReadKey();
@@ -31,7 +36,7 @@ namespace One_Time_File_Cleanup
 
             StreamReader baseFile = new StreamReader(baseListName);
             HashSet<String> wordList = new HashSet<String>();
-            
+
             //Read file and build HashSet of all words
             var deletionCounter = 0;
             deletionCounter = ReadFileAndBuildSet(baseFile, wordList);
@@ -46,7 +51,10 @@ namespace One_Time_File_Cleanup
                 trimmedFile.WriteLine(key);
             }
         }
-
+        static void prepareAnswerList()
+        {
+            //TODO: Prepare Answer List
+        }
         //returns false if null, returns true otherwise
         static bool WordCleanup(String word)
         {
