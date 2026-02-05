@@ -8,8 +8,9 @@
  */
 
 
-//TODO: Actual change of file.
+//TODO: Done! File is trimmed.
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -19,35 +20,31 @@ namespace One_Time_File_Cleanup
     {
         static void Main(string[] args)
         {
-            var fileName = "Word List.txt"; //project settings set to include word list in output file. Fixes the relative path
-            if (!File.Exists(fileName)) 
+            var baseListName = "Word List.txt"; //project settings are set to include word list in output file. 
+                                            //Fixes the relative path. This is a Visual Studio Community setting.
+            if (!File.Exists(baseListName)) 
             {
                 Console.WriteLine("File was not found");
                 Console.ReadKey();
                 return;
             }
-            StreamReader file = new StreamReader(fileName);
+
+            StreamReader baseFile = new StreamReader(baseListName);
             HashSet<String> wordList = new HashSet<String>();
             
-            String word;
+            //Read file and build HashSet of all words
             var deletionCounter = 0;
-            while (!file.EndOfStream)
-            {
-                word = file.ReadLine();
-
-                if (!WordCleanup(word))
-                {
-                    Console.WriteLine("Error! Null word encountered. Terminating...");
-                    return;
-                }
-
-                if(!wordList.Add(word))
-                {
-                    //Console.WriteLine(word); writes all DUPLICATE words
-                    deletionCounter++;
-                }
-            }
+            deletionCounter = ReadFileAndBuildSet(baseFile, wordList);
             Console.WriteLine(deletionCounter);
+
+            //Write to new file
+            var trimmedFileName = "C:/Users/minec/source/repos/C Sharp Learning/C Sharp Learning/trimmed wordle list.txt";
+            StreamWriter trimmedFile = new StreamWriter(trimmedFileName);
+
+            foreach (String key in wordList)
+            {
+                trimmedFile.WriteLine(key);
+            }
         }
 
         //returns false if null, returns true otherwise
@@ -62,10 +59,30 @@ namespace One_Time_File_Cleanup
             
             return true;
         }
-        //static StreamReader OpenTextFile(string name)
-        //{
-        //    StreamReader file = new StreamReader(name);
-        //    return file;
-        //}
+        //returns the amount of lines that were repeated / deleted.
+        static int ReadFileAndBuildSet(StreamReader file, HashSet<String> wordList)
+        {
+            String word;
+            var deletionCounter = 0;
+
+            while (!file.EndOfStream)
+            {
+                word = file.ReadLine();
+
+                if (!WordCleanup(word))
+                {
+                    Console.WriteLine("Error! Null word encountered. Terminating...");
+                    Environment.Exit(-1);
+                }
+
+                if (!wordList.Add(word)) //HashSet Add method doesn't allow duplicates. So we automatically don't need to check for them.
+                {
+                    //Console.WriteLine(word); writes all DUPLICATE words
+                    deletionCounter++;
+                }
+            }
+
+            return deletionCounter;
+        }
     }
 }
