@@ -50,6 +50,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Trimmed Answer List.txt" />
     <Content Include="trimmed wordle list.txt" />
     <Content Include="Word List.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
