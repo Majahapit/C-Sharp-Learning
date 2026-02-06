@@ -8,7 +8,7 @@
  */
 
 
-//TODO: Generate acceptable answer list. "trimmed wordle list.txt" is currently a guess list
+//TODO: DONE
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +29,7 @@ namespace One_Time_File_Cleanup
                                                 //Fixes the relative path. This is a Visual Studio Community setting.
             if (!File.Exists(baseListName))
             {
-                Console.WriteLine("File was not found");
+                Console.WriteLine("Base wordlist was not found");
                 Console.ReadKey();
                 return;
             }
@@ -50,10 +50,42 @@ namespace One_Time_File_Cleanup
             {
                 trimmedFile.WriteLine(key);
             }
+            trimmedFile.Close();
+            baseFile.Close();
         }
         static void prepareAnswerList()
         {
-            //TODO: Prepare Answer List
+            var baseListName = "C:\\Users\\minec\\source\\repos\\C Sharp Learning\\C Sharp Learning\\trimmed wordle list.txt";
+            if (!File.Exists(baseListName))
+            {
+                Console.WriteLine("Trimmed wordle list does not exist");
+                Console.ReadKey();
+            }
+
+            StreamReader baseFile = new StreamReader(baseListName);
+            List<String> validAnswerList = new List<string>();
+           
+            String word;
+            while (!baseFile.EndOfStream)
+            {
+                word = baseFile.ReadLine().Trim();
+                
+                if (word.EndsWith("s")) //if word is plural DON'T ADD TO VALID ANSWERS LIST.
+                {
+                    continue;
+                }
+
+                validAnswerList.Add(word);
+            }
+            baseFile.Close();
+
+            string finalAnswerFileName = "C:\\Users\\minec\\source\\repos\\C Sharp Learning\\C Sharp Learning\\Trimmed Answer List.txt";
+            StreamWriter finalAnswerFile = new StreamWriter(finalAnswerFileName);
+
+            foreach(string validAnswer in validAnswerList)
+            {
+                finalAnswerFile.WriteLine(validAnswer);
+            }
         }
         //returns false if null, returns true otherwise
         static bool WordCleanup(String word)
